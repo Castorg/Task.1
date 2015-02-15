@@ -1,0 +1,18 @@
+﻿{
+    "name": "Ivan",
+    "surname": "Ivanou",
+    "age": 19,
+    "address": {
+        "country": "Belarus",
+        "city": "Minsk",
+        "numbers": [ 4, 8, 15, 16, 23, 42 ]
+                },
+                "extrainfo": {
+                    "a": null,
+                    "birthday": {
+                        "day": 15,
+                        "month": "october",
+                         "year": 1992 }
+    }  
+
+}
