@@ -1,5 +1,10 @@
 ﻿using System;
+using System.IO;
+using System.Net.Mime;
+using System.Runtime.Remoting.Channels;
+using System.Security.AccessControl;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Script.Serialization;
 
 namespace WebApplication1.App_Data
@@ -8,19 +13,23 @@ namespace WebApplication1.App_Data
     {
         public void ProcessRequest(HttpContext context)
         {
-            const String htmlTemplate = "<html><head><title>{0}</title></head><body>" +
-            "<h1>Hello I'm: " +
-            "<span style='color:blue'>{1}</span></h1>" +
-            "</body></html>";
-            var response = String.Format(htmlTemplate,
-            "HTTP Handlers", context.Request.Path);
-            context.Response.Write(response);
+            var path = context.Server.MapPath("contact.json");
+
+            var a = Environment.CurrentDirectory.ToString();
+            //File.OpenRead(@"..\..\inetpub\wwwroot\content.json");
+
+            //var c = File.Open(path , FileMode.Open);
+            var b = File.ReadLines(path);
+            context.Response.ContentType = "application/json";
+            foreach (var v in b)
+            {
+                context.Response.Write(v);
+            }
         }
+
         public bool IsReusable
         {
-            get { return false; }
+            get { return true; }
         }
-
-
     }
 }
