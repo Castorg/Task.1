@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>SinglePage</title>
+      
+          <link rel="javascript" type="text/javascript" href="EFContext/JavaScript1.js">
+          <link rel="stylesheet" type="text/css" href="StyleSheet1.css">
+    </head>
+    <body>
+        
+
+        <form method="POST" id="formLog" action="javascript:void(null);" onsubmit="Call()">
+            <p>
+                <input type="text" class="log">
+                <input type="password" class="log">
+            </p>
+            <p>
+                <input value="Log On" type="submit" class="log">
+                <input type="reset" class="log">
+            </p>
+        </form>
+        
+        
+
+        <p>
+            <input class="HiddenFiend" value="Load data" type="button" onclick="LoadJson()">
+        </p>
+        <p>
+            <input class="HiddenFiend" value="Log out" type="button" onclick="LogOff()">
+        </p>
+        <ul id="Tabs">
+            <li id="OneTab" class="SelectedTab"><a href="#One" onclick="One(); return false;">Текст</a></li>
+            <li id="TwoTab" class="Tab"><a href="#Two" onclick="Two(); return false;">Структура</a></li>
+
+        </ul>
+        <div id="Content">
+            <div id="One">
+                <p id="OneContent">Текстовый вариант</p>
+            </div>
+            <div id="Two" style="display: none;">
+                <p id="TwoContent">Дерево структуры</p>
+            </div>
+        </div>
+
+    </body>
+</html>
+    
+
+<script src="/EFContext/JavaScript1.js"> </script>
