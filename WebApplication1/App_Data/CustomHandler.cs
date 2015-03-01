@@ -14,11 +14,6 @@ namespace WebApplication1.App_Data
         public void ProcessRequest(HttpContext context)
         {
             var path = context.Server.MapPath("contact.json");
-
-            var a = Environment.CurrentDirectory.ToString();
-            //File.OpenRead(@"..\..\inetpub\wwwroot\content.json");
-
-            //var c = File.Open(path , FileMode.Open);
             var b = File.ReadLines(path);
             context.Response.ContentType = "application/json";
             foreach (var v in b)
