@@ -27,7 +27,7 @@
             <input class="HiddenFiend" value="Load data" type="button" onclick="LoadJson()">
         </p>
         <p>
-            <input class="HiddenFiend" value="Log out" type="button" onclick="LogOff()">
+            <input class="HiddenFiend" value="Log out" type="button" onclick="LogOut()">
         </p>
         <ul id="Tabs">
             <li id="OneTab" class="SelectedTab"><a href="#One" onclick="One(); return false;">Текст</a></li>
@@ -48,3 +48,6 @@
     
 
 <script src="/EFContext/JavaScript1.js"> </script>
+<script>
+    window.onload = CheckCookie();
+</script>

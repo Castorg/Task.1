@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Security.Principal;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web;
+using WebApplication1.EFContext;
 
 namespace WebApplication1
 {
@@ -21,8 +23,8 @@ namespace WebApplication1
                 (HttpContext.Current.Request.BinaryRead
                 (HttpContext.Current.Request.TotalBytes)));
 
-            Regex reg1 = new Regex("<");
-            Regex reg2 = new Regex(">");
+            var reg1 = new Regex("<");
+            var reg2 = new Regex(">");
 
             var a = reg1.Match(loginPassString).Index;
             var b = reg2.Match(loginPassString).Index;
@@ -36,23 +38,81 @@ namespace WebApplication1
             log.Append(loginPassString, a + 1, c - a - 2);
             pass.Append(loginPassString, b + 2, d - b - 2);
 
+            string user;
+            using (var db = new UserContext())
+            {
+                user = db.Users.ToArray()[0].Login;
+            }
+
+            if (string.Compare(user, log.ToString()) == 0)
+            {
+                context.Response.Write("authorize");
+
+                var cookie = new HttpCookie("user");
+                cookie.Values["1"] = log.ToString();
+                cookie.Values["2"] = pass.ToString();
+                cookie.Expires = DateTime.Now.AddMinutes(10);
+                context.Response.SetCookie(cookie);
+
+                var keep = new HttpCookie("keep-alive");
+                keep.Values["1"] = "keep";
+                cookie.Expires = DateTime.Now.AddMinutes(10);
+                context.Response.SetCookie(keep);
 
 
-            var cookie = new HttpCookie("user");
-            cookie.Values["1"] = log.ToString();
-            cookie.Values["2"] = pass.ToString();
-            cookie.Expires = DateTime.Now.AddMinutes(10);
-            context.Response.SetCookie(cookie);
+                context.User = new UserProvider(log.ToString(), pass.ToString());
+            }
+            else
+            {
+                context.Response.Write("notauthorize"); 
+            }
+        }
+    }
 
+    public class CustomIdentity : IIdentity
+    {
+        private User user;
+        public CustomIdentity(string log , string pass)
+        {
+            user = new User();
+            user.Login = log;
+            user.Password = pass;
+        }
+        public string AuthenticationType
+        {
+            get { return typeof (UserContext).ToString(); }
+        }
 
+        public bool IsAuthenticated
+        {
+            get { return (user != null); }
+        }
 
+        public string Name
+        {
+            get
+            {
+                return user != null ? user.Login : "anonim";
+            }
+        }
+    }
 
-            var req = context.Request.Cookies["user"];
+    public class UserProvider : IPrincipal
+    {
 
-            var qqq = req.Values["1"];
-            var zzz = req.Values["2"];
+        private CustomIdentity userIdentity;
 
-            int pokjihuyg = 0;
+        public UserProvider(string name , string pass)
+        {
+            userIdentity = new CustomIdentity(name , pass);
+        }
+        public IIdentity Identity
+        {
+            get { return userIdentity; }
+        }
+        public bool IsInRole(string role)
+        {
+            return (userIdentity != null);
         }
     }
 }

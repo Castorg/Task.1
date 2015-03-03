@@ -28,7 +28,7 @@ function Two() {
     document.getElementById('Two').style.display = 'block';
 }
 
-function LogOnComplete() {
+function LogOn() {
     var abc = document.getElementsByClassName('log');
     for (var i = 0; i < abc.length; i++) {
         abc[i].style.display = 'none';
@@ -101,7 +101,38 @@ function Call() {
     temp.send(data);
     temp.onreadystatechange = function () {
         if (temp.readyState == 4) {
-            LogOnComplete();
+            var answer = temp.response;
+            if (answer == "authorize") {
+                LogOnComplete();
+            }
         }
     }
+}
+
+function CheckCookie() {
+    var answer = getCookie("keep-alive");
+    if (answer != undefined) {
+        if (answer == "1=keep") {
+             LogOn();
+        }
+        else {
+            LogOff();
+        }
+    }
+}
+function getCookie(name) {
+    var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+    return matches ? decodeURIComponent(matches[1]) : undefined;
+
+}
+
+function LogOut() {
+    delCookie("keep-alive");
+    LogOff();
+}
+function delCookie(name) {
+    var cookieDate = new Date();
+    cookieDate.setTime(cookieDate.getTime() - 1);
+    document.cookie = name + "=; expires=" + cookieDate.toGMTString();
+    var answer = getCookie("isAuthorise");
 }
